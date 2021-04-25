@@ -7,6 +7,7 @@
 #define SLIDER_TOUCH_THRESHOLD 100 // minimum scan value needed to register as a touch press
 #define SLIDER_LEFT_DIVIDER 400 // midpoint scan value between left and center portion of slider
 #define SLIDER_RIGHT_DIVIDER 700 // midpoint scan value between center and right portion of slider
+#define SLIDER_CENTER_DIVIDER 550
 
 /* Purpose: initializes the slider for readings
  * Returns: N/A

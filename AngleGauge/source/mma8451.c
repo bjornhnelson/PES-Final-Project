@@ -77,8 +77,6 @@ void convert_xyz_to_roll_pitch(void) {
 
 	roll = atan2(ay, az)*180/M_PI;
 	pitch = atan2(ax, sqrt(ay*ay + az*az))*180/M_PI;
-	PRINTF("Roll: %f  Pitch: %f\r\n");
-
 }
 
 
