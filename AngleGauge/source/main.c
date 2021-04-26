@@ -35,6 +35,7 @@ float calibrate_value(float a, float b) {
 		return b-a;
 	else
 		return a-b;
+	//return fabs(b-a);
 }
 
 int main() {
@@ -76,8 +77,22 @@ int main() {
 		uint8_t roll_out = roll_actual * 255 / 180;
 		uint8_t pitch_out = pitch_actual * 255 / 180;
 
-    	set_led_PWM(roll_out, 0, pitch_out);
-    	tick_delay(delay_time);
+		if ((roll_actual > 40 && roll_actual < 50) || (pitch_actual > 40 && pitch_actual < 50))
+			set_led_PWM(roll_out, 255, pitch_out);
+		else
+			set_led_PWM(roll_out, 0, pitch_out);
+		tick_delay(delay_time);
+
+//		if ((roll_actual > 40 && roll_actual < 50) || (pitch_actual > 40 && pitch_actual < 50)) {
+//			set_led_PWM(roll_out, 0, pitch_out);
+//			tick_delay(delay_time/2);
+//			set_led_PWM(0, 0, 0);
+//			tick_delay(delay_time/2);
+//		}
+//		else {
+//			set_led_PWM(roll_out, 0, pitch_out);
+//			tick_delay(delay_time);
+//		}
     }
 
     return 0 ;
