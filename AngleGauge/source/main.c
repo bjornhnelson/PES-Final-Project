@@ -24,10 +24,11 @@
 #define MIN_BRIGHTNESS 0
 #define MAX_BRIGHTNESS 255
 
+#define MIN_ANGLE 0
 #define MIDPOINT_ANGLE 45
 #define MAX_ANGLE 180
 
-#define ANGLE_OFFSET 1.5 // margin of error in either direction for certain angle
+#define ANGLE_OFFSET 2 // margin of error in either direction for certain angle
 
 
 void init_system() {
@@ -98,17 +99,18 @@ int main() {
 		// output data over UART
 		PRINTF("Roll: %.2f  Pitch: %.2f\r\n", roll_actual, pitch_actual);
 
-		// calculate brightness for LED
-		uint8_t roll_out = roll_actual * MAX_BRIGHTNESS / MAX_ANGLE;
-		uint8_t pitch_out = pitch_actual * MAX_BRIGHTNESS / MAX_ANGLE;
-
+		// angles < 2 degrees (led off at start point)
+		if ((roll_actual < MIN_ANGLE+ANGLE_OFFSET) && (pitch_actual < MIN_ANGLE+ANGLE_OFFSET)) {
+			set_led_PWM(MIN_BRIGHTNESS, MIN_BRIGHTNESS, MIN_BRIGHTNESS); // all leds off
+		}
 		// approximately 45 degree angle on either x or y axis
-		if (angle_match(roll_actual, MIDPOINT_ANGLE, ANGLE_OFFSET) || angle_match(pitch_actual, MIDPOINT_ANGLE, ANGLE_OFFSET)) {
-			set_led_PWM(roll_out, MAX_BRIGHTNESS, pitch_out); // green led on
+		else if (angle_match(roll_actual, MIDPOINT_ANGLE, ANGLE_OFFSET) || angle_match(pitch_actual, MIDPOINT_ANGLE, ANGLE_OFFSET)) {
+			set_led_PWM(MIN_BRIGHTNESS, MAX_BRIGHTNESS, MIN_BRIGHTNESS); // green led on
 		}
 		// all other angles
 		else {
-			set_led_PWM(roll_out, MIN_BRIGHTNESS, pitch_out); // green led off
+			// set brightness for red and blue leds
+			set_led_PWM(roll_actual * MAX_BRIGHTNESS / MAX_ANGLE, MIN_BRIGHTNESS, pitch_actual * MAX_BRIGHTNESS / MAX_ANGLE);
 		}
 
 		// delay for specified number of milliseconds (polling interval)
