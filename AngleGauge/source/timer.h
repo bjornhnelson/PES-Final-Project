@@ -1,13 +1,10 @@
 #ifndef TIMER_H_
 #define TIMER_H_
 
-#include "main.h"
+#include <stdint.h>
 
 typedef uint32_t ticktime_t; // time since boot, in msec (1 kHz)
 							 // 32 bits holds ~50 days of time
-
-#define SYSTEM_FREQ 48000000
-#define DESIRED_FREQ 1000
 
 /*
  * Purpose: Initializes the ticktime counters. Immediately after this function

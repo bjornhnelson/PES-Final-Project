@@ -3,9 +3,31 @@
  * @brief   functions for controlling the LED
  */
 
+#include "MKL25Z4.h"
 #include "led.h"
 
-void init_led_PWM(uint16_t period) {
+// counter needed for having 1000 Hz PWM frequency
+#define PWM_PERIOD 48000
+
+// Red LED is connected to PORT B, pin 18
+#define RED_LED_PIN 18
+#define RED_LED_PIN_CTRL_REG PORTB->PCR[RED_LED_PIN]
+
+// Green LED is connected to PORT B, pin 19
+#define GREEN_LED_PIN 19
+#define GREEN_LED_PIN_CTRL_REG PORTB->PCR[GREEN_LED_PIN]
+
+// Blue LED is connected to PORT D, pin 1
+#define BLUE_LED_PIN 1
+#define BLUE_LED_PIN_CTRL_REG PORTD->PCR[BLUE_LED_PIN]
+
+// used to adjust the duty cycle
+#define RED_PWM TPM2->CONTROLS[0].CnV
+#define GREEN_PWM TPM2->CONTROLS[1].CnV
+#define BLUE_PWM TPM0->CONTROLS[1].CnV
+
+
+void init_led_PWM() {
 	// send clock to GPIO ports B (red & green) and D (blue)
 	SIM->SCGC5 |= SIM_SCGC5_PORTB_MASK | SIM_SCGC5_PORTD_MASK;
 
@@ -30,8 +52,8 @@ void init_led_PWM(uint16_t period) {
 	// PWM frequency = 1000 Hz
 	// System Clock / (Prescaler * Desired PWM Frequency) - 1 = MOD Counter
 	// 48000000 / (1 * 1000) - 1 = 47999
-	TPM2->MOD = period-1;
-	TPM0->MOD = period-1;
+	TPM2->MOD = PWM_PERIOD-1;
+	TPM0->MOD = PWM_PERIOD-1;
 
 	// Prescalar set to 1
 	TPM2->SC = TPM_SC_PS(0);
@@ -54,8 +76,6 @@ void init_led_PWM(uint16_t period) {
 	// Start TPM
 	TPM2->SC |= TPM_SC_CMOD(1);
 	TPM0->SC |= TPM_SC_CMOD(1);
-
-	LOG("LEDs initialized\r\n");
 
 }
 

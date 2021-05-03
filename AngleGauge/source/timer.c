@@ -4,7 +4,10 @@
  */
 
 #include "timer.h"
-#include "core_cm0plus.h"
+#include "MKL25Z4.h"
+
+#define SYSTEM_FREQ 48000000
+#define DESIRED_FREQ 1000
 
 // global variables accessed in interrupt service routine
 static volatile ticktime_t g_now = 0;
@@ -25,7 +28,6 @@ void init_systick() {
 	g_now = 0;
 	g_timer = 0;
 
-	LOG("SysTick initialized\r\n");
 }
 
 void SysTick_Handler() {

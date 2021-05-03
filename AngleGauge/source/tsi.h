@@ -1,13 +1,8 @@
 #ifndef TSI_H_
 #define TSI_H_
 
-#define SCAN_OFFSET 540  // offset for scan range
-#define SCAN_DATA TSI0->DATA & 0xFFFF // the scan result bits held in TSI0_DATA_TSICNT
-
-#define SLIDER_TOUCH_THRESHOLD 100 // minimum scan value needed to register as a touch press
-#define SLIDER_LEFT_DIVIDER 400 // midpoint scan value between left and center portion of slider
-#define SLIDER_RIGHT_DIVIDER 700 // midpoint scan value between center and right portion of slider
-#define SLIDER_CENTER_DIVIDER 550
+// return values for get_touch_location() function
+enum location {none, left, right};
 
 /* Purpose: initializes the slider for readings
  * Returns: N/A
@@ -23,5 +18,11 @@ void init_touch_sensor();
  * 700-1000 = right touch - blue color
  */
 int scan_touch_sensor();
+
+/*
+ * Purpose: determines where slider was touched based on thresholds
+ * Returns: integer enum corresponding to location
+ */
+int get_touch_location();
 
 #endif
