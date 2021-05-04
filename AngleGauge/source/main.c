@@ -78,7 +78,7 @@ int main() {
 
     while (1) {
     	// get data from the accelerometer, save in global variables: roll, pitch
-    	read_full_xyz();
+    	read_xyz();
     	convert_xyz_to_roll_pitch();
 
     	// run a slider touch scan, update offset variables if touched

@@ -10,11 +10,23 @@
 
 #include <stdint.h>
 
-int init_mma(void);
-void read_full_xyz(void);
-void read_xyz(void);
-void convert_xyz_to_roll_pitch(void);
+/*
+ *
+ */
+int init_mma();
 
+
+/*
+ *
+ */
+void read_xyz();
+
+/*
+ *
+ */
+void convert_xyz_to_roll_pitch();
+
+// global variables for saving data
 extern float roll, pitch;
 extern int16_t acc_X, acc_Y, acc_Z;
 
