@@ -61,7 +61,7 @@ void i2c_busy() {
 	while ((I2C0->S & I2C_S_IICIF_MASK) == 0U); /* wait interrupt */
 	I2C0->S |= I2C_S_IICIF_MASK; /* clear interrupt bit */
 
-	/* Clear arbitration error flag*/
+	/* Clear arbitration error flag */
 	I2C0->S |= I2C_S_ARBL_MASK;
 
 
@@ -71,7 +71,7 @@ void i2c_busy() {
 	I2C0->C1 |= I2C_C1_MST_MASK; /* START signal generated */
 
 	I2C0->C1 |= I2C_C1_IICEN_MASK;
-	/*Wait until start is send*/
+	/* Wait until start is send */
 
 	/* Send stop */
 	I2C0->C1 &= ~I2C_C1_IICEN_MASK;
@@ -81,7 +81,7 @@ void i2c_busy() {
 	I2C0->C1 |= I2C_C1_IICEN_MASK;
 
 	/* wait */
-	/* Clear arbitration error & interrupt flag*/
+	/* Clear arbitration error & interrupt flag */
 	I2C0->S |= I2C_S_IICIF_MASK;
 	I2C0->S |= I2C_S_ARBL_MASK;
 	lock_detect=0;
@@ -99,34 +99,34 @@ void i2c_wait() {
 }
 
 void i2c_start() {
-	I2C_TRAN; /*set to transmit mode */
-	I2C_M_START; /*send start	*/
+	I2C_TRAN; /* set to transmit mode */
+	I2C_M_START; /* send start	*/
 }
 
 // using 7 bit addressing reads a byte from dev:address
 uint8_t i2c_read_byte(uint8_t dev, uint8_t address) {
 	uint8_t data;
 
-	I2C_TRAN;							/*set to transmit mode */
-	I2C_M_START;					/*send start	*/
-	I2C0->D = dev;			  /*send dev address	*/
-	I2C_WAIT							/*wait for completion */
+	I2C_TRAN; /* set to transmit mode */
+	I2C_M_START; /* send start	*/
+	I2C0->D = dev; /* send dev address	*/
+	I2C_WAIT /* wait for completion */
 
-	I2C0->D =  address;		/*send read address	*/
-	I2C_WAIT							/*wait for completion */
+	I2C0->D =  address; /* send read address	*/
+	I2C_WAIT /* wait for completion */
 
-	I2C_M_RSTART;				   /*repeated start */
-	I2C0->D = (dev|0x1);	 /*send dev address (read)	*/
-	I2C_WAIT							 /*wait for completion */
+	I2C_M_RSTART; /* repeated start */
+	I2C0->D = (dev|0x1); /* send dev address (read)	*/
+	I2C_WAIT /* wait for completion */
 
-	I2C_REC;						   /*set to recieve mode */
-	NACK;									 /*set NACK after read	*/
+	I2C_REC; /* set to recieve mode */
+	NACK; /* set NACK after read	*/
 
-	data = I2C0->D;					/*dummy read	*/
-	I2C_WAIT								/*wait for completion */
+	data = I2C0->D; /* dummy read	*/
+	I2C_WAIT /* wait for completion */
 
-	I2C_M_STOP;							/*send stop	*/
-	data = I2C0->D;					/*read data	*/
+	I2C_M_STOP; /* send stop	*/
+	data = I2C0->D; /* read data	*/
 
 	return data;
 }
@@ -136,15 +136,15 @@ uint8_t i2c_read_byte(uint8_t dev, uint8_t address) {
 // using 7 bit addressing writes a byte data to dev:address
 void i2c_write_byte(uint8_t dev, uint8_t address, uint8_t data) {
 
-	I2C_TRAN;							/*set to transmit mode */
-	I2C_M_START;					/*send start	*/
-	I2C0->D = dev;			  /*send dev address	*/
-	I2C_WAIT						  /*wait for ack */
+	I2C_TRAN; /* set to transmit mode */
+	I2C_M_START; /* send start	*/
+	I2C0->D = dev; /* send dev address	*/
+	I2C_WAIT /* wait for ack */
 
-	I2C0->D =  address;		/*send write address	*/
+	I2C0->D =  address; /* send write address	*/
 	I2C_WAIT
 
-	I2C0->D = data;				/*send data	*/
+	I2C0->D = data; /* send data	*/
 	I2C_WAIT
 	I2C_M_STOP;
 }
