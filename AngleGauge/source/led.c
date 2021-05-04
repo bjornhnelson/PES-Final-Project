@@ -27,7 +27,7 @@
 #define BLUE_PWM TPM0->CONTROLS[1].CnV
 
 
-void init_led_PWM() {
+void init_led() {
 	// send clock to GPIO ports B (red & green) and D (blue)
 	SIM->SCGC5 |= SIM_SCGC5_PORTB_MASK | SIM_SCGC5_PORTD_MASK;
 
@@ -79,7 +79,7 @@ void init_led_PWM() {
 
 }
 
-void set_led_PWM(uint8_t red_value, uint8_t green_value, uint8_t blue_value) {
+void set_led(uint8_t red_value, uint8_t green_value, uint8_t blue_value) {
 	// division done last, to maintain accuracy of int values
 	RED_PWM = (red_value * PWM_PERIOD) / 0xFF;
 	GREEN_PWM = (green_value * PWM_PERIOD) / 0xFF;

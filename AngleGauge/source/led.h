@@ -6,7 +6,7 @@
 /* Purpose: sets up the three LEDs for PWM control, uses macro for PWM period
  *
  */
-void init_led_PWM();
+void init_led();
 
 /* Purpose: updates the LEDs to shine at specified brightness values
  *
@@ -14,6 +14,6 @@ void init_led_PWM();
  * green_value = brightness of green LED (0-255)
  * blue_value = brightness of blue LED (0-255)
  */
-void set_led_PWM(uint8_t red_value, uint8_t green_value, uint8_t blue_value);
+void set_led(uint8_t red_value, uint8_t green_value, uint8_t blue_value);
 
 #endif

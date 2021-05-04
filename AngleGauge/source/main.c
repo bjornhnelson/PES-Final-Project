@@ -20,13 +20,15 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
+#include <stdint.h>
 
 #define MIN_BRIGHTNESS 0
 #define MAX_BRIGHTNESS 255
 
 #define MIN_ANGLE 0
 #define MIDPOINT_ANGLE 45
-#define MAX_ANGLE 180
+#define MAX_ROLL 180
+#define MAX_PITCH 90
 
 #define ANGLE_OFFSET 2 // margin of error in either direction for certain angle
 
@@ -42,7 +44,7 @@ void init_system() {
 	#endif
 
 	init_systick();
-	init_led_PWM();
+	init_led();
 	init_touch_sensor();
 	i2c_init();
 	init_mma();
@@ -55,7 +57,8 @@ int angle_match(float cur_angle, float desired_angle, float max_offset) {
 
 int main() {
 
-    init_system(); // initializes UART and peripherals
+
+	init_system(); // initializes UART and peripherals
 
     // get polling interval from user
     int delay_time = 100;
@@ -97,20 +100,23 @@ int main() {
 		pitch_actual = fabsf(pitch - pitch_offset);
 
 		// output data over UART
-		PRINTF("Roll: %.2f  Pitch: %.2f\r\n", roll_actual, pitch_actual);
+		PRINTF("Roll: %.2f     Pitch: %.2f\r\n", roll_actual, pitch_actual);
 
 		// angles < 2 degrees (led off at start point)
 		if ((roll_actual < MIN_ANGLE+ANGLE_OFFSET) && (pitch_actual < MIN_ANGLE+ANGLE_OFFSET)) {
-			set_led_PWM(MIN_BRIGHTNESS, MIN_BRIGHTNESS, MIN_BRIGHTNESS); // all leds off
+			set_led(MIN_BRIGHTNESS, MIN_BRIGHTNESS, MIN_BRIGHTNESS); // all leds off
 		}
 		// approximately 45 degree angle on either x or y axis
 		else if (angle_match(roll_actual, MIDPOINT_ANGLE, ANGLE_OFFSET) || angle_match(pitch_actual, MIDPOINT_ANGLE, ANGLE_OFFSET)) {
-			set_led_PWM(MIN_BRIGHTNESS, MAX_BRIGHTNESS, MIN_BRIGHTNESS); // green led on
+			set_led(MIN_BRIGHTNESS, MAX_BRIGHTNESS, MIN_BRIGHTNESS); // green led on
 		}
 		// all other angles
 		else {
 			// set brightness for red and blue leds
-			set_led_PWM(roll_actual * MAX_BRIGHTNESS / MAX_ANGLE, MIN_BRIGHTNESS, pitch_actual * MAX_BRIGHTNESS / MAX_ANGLE);
+			uint8_t red_value = roll_actual * MAX_BRIGHTNESS / MAX_ROLL;
+			uint8_t blue_value = pitch_actual * MAX_BRIGHTNESS / MAX_PITCH;
+			//PRINTF("R: %d   B: %d\r\n", red_value, blue_value);
+			set_led(red_value, MIN_BRIGHTNESS, blue_value);
 		}
 
 		// delay for specified number of milliseconds (polling interval)
