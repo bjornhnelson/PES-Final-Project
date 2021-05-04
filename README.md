@@ -21,7 +21,7 @@ The LEDs, UART, and touch slider are also incorporated into the project.
 
 ## Test Outline (see YouTube link and photos in Testing directory)  
 
-Demo Video: 
+Demo Video: https://youtu.be/yYVCbn9hacQ  
 
 I used a protractor to test a certain subset of angles, while verifying the output value and LED color.  
 Example angles tested: 0°, 22°, 30°, 45°, 60°, 90°, 135°, 180°.  
